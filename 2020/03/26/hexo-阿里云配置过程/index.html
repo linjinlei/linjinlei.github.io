@@ -13,11 +13,11 @@
 
     <title>
         
-          hexo 部署心得 - Karry&#39;s Blog
+          hexo + 阿里云配置过程 - Karry&#39;s Blog
         
     </title>
 
-    <link rel="canonical" href="http://182.92.129.205/2020/03/21/hexo部署心得/">
+    <link rel="canonical" href="http://182.92.129.205/2020/03/26/hexo-阿里云配置过程/">
 
     <!-- Bootstrap Core CSS -->
     
@@ -171,14 +171,16 @@
                 <div class="post-heading">
                     <div class="tags">
                         
-                          <a class="tag" href="/tags/#随便聊聊" title="随便聊聊">随便聊聊</a>
+                          <a class="tag" href="/tags/#教程" title="教程">教程</a>
+                        
+                          <a class="tag" href="/tags/#hexo" title="hexo">hexo</a>
                         
                     </div>
-                    <h1>hexo 部署心得</h1>
-                    <h2 class="subheading">随笔，偶尔有所感想</h2>
+                    <h1>hexo + 阿里云配置过程</h1>
+                    <h2 class="subheading">Mac hexo配置过程</h2>
                     <span class="meta">
                         Posted by Karry Lin on
-                        2020-03-21
+                        2020-03-26
                     </span>
                 </div>
             </div>
@@ -197,10 +199,36 @@
                 col-md-10 col-md-offset-1
                 post-container">
 
-                <h1 id="第一篇正式的博客"><a href="#第一篇正式的博客" class="headerlink" title="第一篇正式的博客"></a>第一篇正式的博客</h1><p>折腾了两天，从选择框架，到组服务器、域名审核，这个过程是我一直想做的，但是总是被各种奇怪的原因阻断（最接近成功的一次居然是因为户口所在地和电话归属地不同。。。），突然做好了感觉有一丝丝的小激动。总的来看技术上没啥难度（毕竟划水了三年，各种编程语言还是看得懂），主要是感受这个过程，收获到的其实是比想象的要更多的。在动手之前看看别人的博客，简单思考之后发现好像没啥难度，只要想做就能做好，事实上并不是这样。。。我发现对于一个选择恐惧症来说，选模板才是最难的一步（首先你要决定用什么框架。。。）</p>
-<p>为了方便我之后又要重装hexo，我决定还是把整个过程再整理一下，省的之后又要踩一次坑，具体的步骤下一篇文章发出来。在这里还是要感谢<strong>朱老板</strong>给我提供的模板建议、<strong>湛老板</strong>给我提供的header原图（超级好康，除了画质好的有点过分，导致廉价的云服务器顶不住了。。。有钱的朋友还是要租一个好一点的服务器）</p>
-<p>关于hexo的各种功能和细节还在调试当中，如果有朋友发现问题欢迎大家联系我哈（主要是模板里面还有很多东西没改过来，暂时没注意到，以后看到会逐个解决，也请大家谅解）</p>
-<h1 id="关于hexo和WordPress"><a href="#关于hexo和WordPress" class="headerlink" title="关于hexo和WordPress"></a>关于hexo和WordPress</h1><p>好吧，我承认刚开始的时候确实是馋WordPress的平台已经非常全面的教程，但是试过以后才知道，这个真的太臃肿了。。。而且对于有一定基础的朋友来说还是推荐hexo，但是如果没基础的还是慎重（学一下也不错哈）。</p>
+                <h1 id="Node-js安装"><a href="#Node-js安装" class="headerlink" title="Node.js安装"></a>Node.js安装</h1><p>##安装过程</p>
+<p><a href="https://nodejs.org/" target="_blank" rel="noopener">Node.js官网</a> 选择合适的版本，我当时选择的是右边的LTS版本。下载下来直接一直下一步就可以装好了</p>
+<h2 id="检测是否成功"><a href="#检测是否成功" class="headerlink" title="检测是否成功"></a>检测是否成功</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">node -v</span><br><span class="line">npm -v</span><br></pre></td></tr></table></figure>
+
+<p>有内容输出就安装成功了，这个步骤不推荐brew安装，有可能会报错，官方下载安装包多快好省</p>
+<h1 id="Git安装"><a href="#Git安装" class="headerlink" title="Git安装"></a>Git安装</h1><h2 id="安装过程"><a href="#安装过程" class="headerlink" title="安装过程"></a>安装过程</h2><p>Mac上安装Git比较方便，终端上输入git回车，会提示没有安装，跳出一个窗口点安装就行，时间根据网络来</p>
+<h2 id="检测是否成功-1"><a href="#检测是否成功-1" class="headerlink" title="检测是否成功"></a>检测是否成功</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git --version</span><br></pre></td></tr></table></figure>
+
+<p>如果有提示出来就OK了</p>
+<h1 id="Hexo安装"><a href="#Hexo安装" class="headerlink" title="Hexo安装"></a>Hexo安装</h1><p>安装好上面的Node.js和git以后，hexo安装非常简单，一条指令就行</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install -g hexo-cli</span><br></pre></td></tr></table></figure>
+
+<p>等他装完就行了</p>
+<h2 id="检测是否成功-2"><a href="#检测是否成功-2" class="headerlink" title="检测是否成功"></a>检测是否成功</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo --version</span><br></pre></td></tr></table></figure>
+
+<p>到这里为止就装好了</p>
+<h2 id="新建（重新安装）博客"><a href="#新建（重新安装）博客" class="headerlink" title="新建（重新安装）博客"></a>新建（重新安装）博客</h2><p>新建一个文件夹，进入以后</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 安装依赖包</span></span><br><span class="line">npm install</span><br><span class="line"><span class="comment"># 如果是空文件夹</span></span><br><span class="line">hexo init blog—name</span><br><span class="line"><span class="comment"># 如果是迁移过来的就不用管了</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 新建一篇博客</span></span><br><span class="line">hexo new <span class="string">"name"</span></span><br><span class="line"><span class="comment"># 清空</span></span><br><span class="line">hexo clean</span><br><span class="line"><span class="comment"># 生成</span></span><br><span class="line">hexo g</span><br><span class="line"><span class="comment"># 本地服务器启动</span></span><br><span class="line">hexo s</span><br><span class="line"><span class="comment"># 部署到远程 </span></span><br><span class="line">hexo d</span><br></pre></td></tr></table></figure>
+
+<h1 id="GitHub部署"><a href="#GitHub部署" class="headerlink" title="GitHub部署"></a>GitHub部署</h1><p>去GitHub注册一个账号，然后创建一个仓库，命名必须是：<strong>username.github.io</strong> ，接着去修改博客中的<strong>_congif.yml</strong>文件即可。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Deployment</span></span><br><span class="line"><span class="comment">## Docs: https://hexo.io/docs/deployment.html</span></span><br><span class="line">deploy:</span><br><span class="line">  <span class="built_in">type</span>: git</span><br><span class="line">  repository: https://github.com/username/username.github.io.git</span><br><span class="line">  branch: master</span><br></pre></td></tr></table></figure>
+
+<p>之后访问：<strong>username.github.io</strong>即可看到页面</p>
+<h1 id="云服务器部署"><a href="#云服务器部署" class="headerlink" title="云服务器部署"></a>云服务器部署</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Deployment</span></span><br><span class="line"><span class="comment">## Docs: https://hexo.io/docs/deployment.html</span></span><br><span class="line">deploy:</span><br><span class="line">  <span class="built_in">type</span>: git</span><br><span class="line">  repo: root@IP地址:/var/repo/hexo_static.git</span><br><span class="line">  branch: master</span><br></pre></td></tr></table></figure>
+
+<h1 id="阿里云服务器配置教程"><a href="#阿里云服务器配置教程" class="headerlink" title="阿里云服务器配置教程"></a>阿里云服务器配置教程</h1><p>租一个云服务器，如果有域名的话要去备案等等一系列的操作就不在这里列举了。</p>
+<p>这里主要写一下nginx的相关配置</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 安装git</span></span><br><span class="line">sudo apt-get install git</span><br><span class="line"><span class="comment"># 安装nginx</span></span><br><span class="line">sudo apt-get install nginx</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建私有Git仓库</span></span><br><span class="line">sudo mkdir /var/repo/</span><br><span class="line">sudo chown -R <span class="variable">$USER</span>:<span class="variable">$USER</span> /var/repo/</span><br><span class="line">sudo chmod -R 755 /var/repo/</span><br><span class="line"><span class="built_in">cd</span> /var/repo/</span><br><span class="line">git init --bare hexo_static.git</span><br><span class="line"></span><br><span class="line"><span class="comment"># 配置nginx托管文件目录</span></span><br><span class="line">sudo mkdir -p /var/www/hexo</span><br><span class="line">sudo chown -R <span class="variable">$USER</span>:<span class="variable">$USER</span> /var/www/hexo</span><br><span class="line">sudo chmod -R 755 /var/www/hexo</span><br><span class="line"></span><br><span class="line"><span class="comment"># 修改nginx的default文件</span></span><br><span class="line">sudo vim /etc/nginx/sites-available/default</span><br><span class="line"><span class="comment"># 需要修改的部分如下</span></span><br><span class="line">......</span><br><span class="line">server &#123;</span><br><span class="line">    listen 80 default_server;</span><br><span class="line">    listen [::]:80 default_server ipv6only=on;</span><br><span class="line"> </span><br><span class="line">    root /var/www/hexo; <span class="comment"># 需要修改的部分</span></span><br><span class="line">    index index.html index.htm;</span><br><span class="line">......</span><br><span class="line"></span><br><span class="line"><span class="comment"># 保存并退出文件。如果以后购买并备案域名之后，可以再将配置中的 default_server 修改为你的域名</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 重启nginx服务，应用修改</span></span><br><span class="line">sudo service nginx restart</span><br></pre></td></tr></table></figure>
+
+<p>按照上面的步骤做完，配合本地的hexo d即可完成部署，直接在浏览器上访问即可。</p>
 
 
                 <hr>
@@ -209,13 +237,9 @@
 
                 <ul class="pager">
                     
-                        <li class="previous">
-                            <a href="/2020/03/26/hexo-阿里云配置过程/" data-toggle="tooltip" data-placement="top" title="hexo + 阿里云配置过程">&larr; Previous Post</a>
-                        </li>
-                    
                     
                         <li class="next">
-                            <a href="/2020/03/19/第一篇博客/" data-toggle="tooltip" data-placement="top" title="第一篇博客">Next Post &rarr;</a>
+                            <a href="/2020/03/21/hexo部署心得/" data-toggle="tooltip" data-placement="top" title="hexo 部署心得">Next Post &rarr;</a>
                         </li>
                     
                 </ul>
@@ -262,7 +286,9 @@
                     <h5><a href="/tags/">FEATURED TAGS</a></h5>
                     <div class="tags">
                        
-                          <a class="tag" href="/tags/#随便聊聊" title="随便聊聊">随便聊聊</a>
+                          <a class="tag" href="/tags/#教程" title="教程">教程</a>
+                        
+                          <a class="tag" href="/tags/#hexo" title="hexo">hexo</a>
                         
                     </div>
                 </section>
@@ -298,8 +324,8 @@
 <script type="text/javascript">
     /* * * CONFIGURATION VARIABLES * * */
     var disqus_shortname = "your-disqus-ID";
-    var disqus_identifier = "http://182.92.129.205/2020/03/21/hexo%E9%83%A8%E7%BD%B2%E5%BF%83%E5%BE%97/";
-    var disqus_url = "http://182.92.129.205/2020/03/21/hexo%E9%83%A8%E7%BD%B2%E5%BF%83%E5%BE%97/";
+    var disqus_identifier = "http://182.92.129.205/2020/03/26/hexo-%E9%98%BF%E9%87%8C%E4%BA%91%E9%85%8D%E7%BD%AE%E8%BF%87%E7%A8%8B/";
+    var disqus_url = "http://182.92.129.205/2020/03/26/hexo-%E9%98%BF%E9%87%8C%E4%BA%91%E9%85%8D%E7%BD%AE%E8%BF%87%E7%A8%8B/";
 
     (function() {
         var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
