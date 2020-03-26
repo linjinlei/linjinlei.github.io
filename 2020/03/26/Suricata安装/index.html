@@ -13,11 +13,11 @@
 
     <title>
         
-          hexo + 阿里云配置过程 - Karry&#39;s Blog
+          Suricata安装 - Karry&#39;s Blog
         
     </title>
 
-    <link rel="canonical" href="http://182.92.129.205/2020/03/26/hexo-阿里云配置过程/">
+    <link rel="canonical" href="http://182.92.129.205/2020/03/26/Suricata安装/">
 
     <!-- Bootstrap Core CSS -->
     
@@ -173,11 +173,13 @@
                         
                           <a class="tag" href="/tags/#教程" title="教程">教程</a>
                         
-                          <a class="tag" href="/tags/#hexo" title="hexo">hexo</a>
+                          <a class="tag" href="/tags/#Suricata" title="Suricata">Suricata</a>
+                        
+                          <a class="tag" href="/tags/#IDS" title="IDS">IDS</a>
                         
                     </div>
-                    <h1>hexo + 阿里云配置过程</h1>
-                    <h2 class="subheading">Mac hexo配置过程</h2>
+                    <h1>Suricata安装</h1>
+                    <h2 class="subheading">Ubuntu Suricata安装过程</h2>
                     <span class="meta">
                         Posted by Karry Lin on
                         2020-03-26
@@ -199,36 +201,25 @@
                 col-md-10 col-md-offset-1
                 post-container">
 
-                <h1 id="Node-js安装"><a href="#Node-js安装" class="headerlink" title="Node.js安装"></a>Node.js安装</h1><p>##安装过程</p>
-<p><a href="https://nodejs.org/" target="_blank" rel="noopener">Node.js官网</a> 选择合适的版本，我当时选择的是右边的LTS版本。下载下来直接一直下一步就可以装好了</p>
-<h2 id="检测是否成功"><a href="#检测是否成功" class="headerlink" title="检测是否成功"></a>检测是否成功</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">node -v</span><br><span class="line">npm -v</span><br></pre></td></tr></table></figure>
+                <h1 id="系统"><a href="#系统" class="headerlink" title="系统"></a>系统</h1><p>Ubuntu 14.04、Ubuntu 16.04、Ubuntu 18.04均可</p>
+<h1 id="版本选择"><a href="#版本选择" class="headerlink" title="版本选择"></a>版本选择</h1><p>实际上来说各个版本都OK的，但是经过长时间的测试，问题最少、通用度最高的版本是<strong>4.1.5</strong>，不推荐5以上的版本，和3、4差别很大，而且经常会出现莫名其妙的问题。</p>
+<h1 id="安装所需依赖"><a href="#安装所需依赖" class="headerlink" title="安装所需依赖"></a>安装所需依赖</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get update</span><br><span class="line">sudo apt-get -y install libpcre3 libpcre3-dbg libpcre3-dev build-essential autoconf automake libtool libpcap-dev libnet1-dev libyaml-0-2 libyaml-dev zlib1g zlib1g-dev libcap-ng-dev libcap-ng0 make libmagic-dev libjansson-dev libjansson4 pkg-config</span><br></pre></td></tr></table></figure>
 
-<p>有内容输出就安装成功了，这个步骤不推荐brew安装，有可能会报错，官方下载安装包多快好省</p>
-<h1 id="Git安装"><a href="#Git安装" class="headerlink" title="Git安装"></a>Git安装</h1><h2 id="安装过程"><a href="#安装过程" class="headerlink" title="安装过程"></a>安装过程</h2><p>Mac上安装Git比较方便，终端上输入git回车，会提示没有安装，跳出一个窗口点安装就行，时间根据网络来</p>
-<h2 id="检测是否成功-1"><a href="#检测是否成功-1" class="headerlink" title="检测是否成功"></a>检测是否成功</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git --version</span><br></pre></td></tr></table></figure>
+<h1 id="Suricata安装"><a href="#Suricata安装" class="headerlink" title="Suricata安装"></a>Suricata安装</h1><p>进入Suricata的安装目录</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo ./configure &amp;&amp; sudo make &amp;&amp; sudo make install</span><br><span class="line">sudo ldconfig</span><br></pre></td></tr></table></figure>
 
-<p>如果有提示出来就OK了</p>
-<h1 id="Hexo安装"><a href="#Hexo安装" class="headerlink" title="Hexo安装"></a>Hexo安装</h1><p>安装好上面的Node.js和git以后，hexo安装非常简单，一条指令就行</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install -g hexo-cli</span><br></pre></td></tr></table></figure>
+<h1 id="进一步配置"><a href="#进一步配置" class="headerlink" title="进一步配置"></a>进一步配置</h1><p>这一步仍然在Suricata的安装目录下</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">sudo mkdir /var/<span class="built_in">log</span>/suricata</span><br><span class="line">sudo mkdir /etc/suricata</span><br><span class="line">sudo cp classification.config /etc/suricata</span><br><span class="line">sudo cp reference.config /etc/suricata</span><br><span class="line">sudo cp suricata.yaml /etc/suricata</span><br></pre></td></tr></table></figure>
 
-<p>等他装完就行了</p>
-<h2 id="检测是否成功-2"><a href="#检测是否成功-2" class="headerlink" title="检测是否成功"></a>检测是否成功</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo --version</span><br></pre></td></tr></table></figure>
+<h1 id="Suricata运行及使用"><a href="#Suricata运行及使用" class="headerlink" title="Suricata运行及使用"></a>Suricata运行及使用</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 版本查看</span></span><br><span class="line">suricata -V</span><br><span class="line"><span class="comment"># 监听网卡</span></span><br><span class="line">suricata -c suricata.yaml -s test.rule -i eth0</span><br><span class="line"><span class="comment"># 检测pcap文件</span></span><br><span class="line">suricata -c suricata.yaml -s test.rule -r data.pcap</span><br></pre></td></tr></table></figure>
 
-<p>到这里为止就装好了</p>
-<h2 id="新建（重新安装）博客"><a href="#新建（重新安装）博客" class="headerlink" title="新建（重新安装）博客"></a>新建（重新安装）博客</h2><p>新建一个文件夹，进入以后</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 安装依赖包</span></span><br><span class="line">npm install</span><br><span class="line"><span class="comment"># 如果是空文件夹</span></span><br><span class="line">hexo init blog—name</span><br><span class="line"><span class="comment"># 如果是迁移过来的就不用管了</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 新建一篇博客</span></span><br><span class="line">hexo new <span class="string">"name"</span></span><br><span class="line"><span class="comment"># 清空</span></span><br><span class="line">hexo clean</span><br><span class="line"><span class="comment"># 生成</span></span><br><span class="line">hexo g</span><br><span class="line"><span class="comment"># 本地服务器启动</span></span><br><span class="line">hexo s</span><br><span class="line"><span class="comment"># 部署到远程 </span></span><br><span class="line">hexo d</span><br></pre></td></tr></table></figure>
-
-<h1 id="GitHub部署"><a href="#GitHub部署" class="headerlink" title="GitHub部署"></a>GitHub部署</h1><p>去GitHub注册一个账号，然后创建一个仓库，命名必须是：<strong>username.github.io</strong> ，接着去修改博客中的<strong>_congif.yml</strong>文件即可。</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Deployment</span></span><br><span class="line"><span class="comment">## Docs: https://hexo.io/docs/deployment.html</span></span><br><span class="line">deploy:</span><br><span class="line">  <span class="built_in">type</span>: git</span><br><span class="line">  repository: https://github.com/username/username.github.io.git</span><br><span class="line">  branch: master</span><br></pre></td></tr></table></figure>
-
-<p>之后访问：<strong>username.github.io</strong>即可看到页面</p>
-<h1 id="云服务器部署"><a href="#云服务器部署" class="headerlink" title="云服务器部署"></a>云服务器部署</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Deployment</span></span><br><span class="line"><span class="comment">## Docs: https://hexo.io/docs/deployment.html</span></span><br><span class="line">deploy:</span><br><span class="line">  <span class="built_in">type</span>: git</span><br><span class="line">  repo: root@IP地址:/var/repo/hexo_static.git</span><br><span class="line">  branch: master</span><br></pre></td></tr></table></figure>
-
-<h1 id="阿里云服务器配置教程"><a href="#阿里云服务器配置教程" class="headerlink" title="阿里云服务器配置教程"></a>阿里云服务器配置教程</h1><p>租一个云服务器，如果有域名的话要去备案等等一系列的操作就不在这里列举了。</p>
-<p>这里主要写一下nginx的相关配置</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 安装git</span></span><br><span class="line">sudo apt-get install git</span><br><span class="line"><span class="comment"># 安装nginx</span></span><br><span class="line">sudo apt-get install nginx</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建私有Git仓库</span></span><br><span class="line">sudo mkdir /var/repo/</span><br><span class="line">sudo chown -R <span class="variable">$USER</span>:<span class="variable">$USER</span> /var/repo/</span><br><span class="line">sudo chmod -R 755 /var/repo/</span><br><span class="line"><span class="built_in">cd</span> /var/repo/</span><br><span class="line">git init --bare hexo_static.git</span><br><span class="line"></span><br><span class="line"><span class="comment"># 配置nginx托管文件目录</span></span><br><span class="line">sudo mkdir -p /var/www/hexo</span><br><span class="line">sudo chown -R <span class="variable">$USER</span>:<span class="variable">$USER</span> /var/www/hexo</span><br><span class="line">sudo chmod -R 755 /var/www/hexo</span><br><span class="line"></span><br><span class="line"><span class="comment"># 修改nginx的default文件</span></span><br><span class="line">sudo vim /etc/nginx/sites-available/default</span><br><span class="line"><span class="comment"># 需要修改的部分如下</span></span><br><span class="line">......</span><br><span class="line">server &#123;</span><br><span class="line">    listen 80 default_server;</span><br><span class="line">    listen [::]:80 default_server ipv6only=on;</span><br><span class="line"> </span><br><span class="line">    root /var/www/hexo; <span class="comment"># 需要修改的部分</span></span><br><span class="line">    index index.html index.htm;</span><br><span class="line">......</span><br><span class="line"></span><br><span class="line"><span class="comment"># 保存并退出文件。如果以后购买并备案域名之后，可以再将配置中的 default_server 修改为你的域名</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 重启nginx服务，应用修改</span></span><br><span class="line">sudo service nginx restart</span><br></pre></td></tr></table></figure>
-
-<p>按照上面的步骤做完，配合本地的hexo d即可完成部署，直接在浏览器上访问即可。</p>
+<h1 id="Suricata日志文件"><a href="#Suricata日志文件" class="headerlink" title="Suricata日志文件"></a>Suricata日志文件</h1><p>##路径</p>
+<p>检测的结果一般来说是放在 <strong>/var/log/suricata/</strong> 下</p>
+<h2 id="suricata-log"><a href="#suricata-log" class="headerlink" title="suricata.log"></a>suricata.log</h2><p>存放Suricata运行的日志</p>
+<h2 id="fast-log"><a href="#fast-log" class="headerlink" title="fast.log"></a>fast.log</h2><p>记录一些匹配信息</p>
+<h2 id="eve-json"><a href="#eve-json" class="headerlink" title="eve.json"></a>eve.json</h2><p>alert等信息一般来说都放在这个json文件里面</p>
+<h2 id="rule-perf-log"><a href="#rule-perf-log" class="headerlink" title="rule-perf.log"></a>rule-perf.log</h2><p>这个文件记录每条规则的匹配时间等详细信息，如果需要开启这个功能需要在suricata.yaml中开启，会<strong>影响检测性能</strong></p>
+<h2 id="packet-stats-log"><a href="#packet-stats-log" class="headerlink" title="packet_stats.log"></a>packet_stats.log</h2><p>这个文件记录每个数据包的匹配信息，如果需要开启这个功能需要在suricata.yaml中开启，会<strong>影响检测性能</strong></p>
 
 
                 <hr>
@@ -237,13 +228,9 @@
 
                 <ul class="pager">
                     
-                        <li class="previous">
-                            <a href="/2020/03/26/Suricata安装/" data-toggle="tooltip" data-placement="top" title="Suricata安装">&larr; Previous Post</a>
-                        </li>
-                    
                     
                         <li class="next">
-                            <a href="/2020/03/21/hexo部署心得/" data-toggle="tooltip" data-placement="top" title="hexo 部署心得">Next Post &rarr;</a>
+                            <a href="/2020/03/26/hexo-阿里云配置过程/" data-toggle="tooltip" data-placement="top" title="hexo + 阿里云配置过程">Next Post &rarr;</a>
                         </li>
                     
                 </ul>
@@ -292,7 +279,9 @@
                        
                           <a class="tag" href="/tags/#教程" title="教程">教程</a>
                         
-                          <a class="tag" href="/tags/#hexo" title="hexo">hexo</a>
+                          <a class="tag" href="/tags/#Suricata" title="Suricata">Suricata</a>
+                        
+                          <a class="tag" href="/tags/#IDS" title="IDS">IDS</a>
                         
                     </div>
                 </section>
@@ -328,8 +317,8 @@
 <script type="text/javascript">
     /* * * CONFIGURATION VARIABLES * * */
     var disqus_shortname = "your-disqus-ID";
-    var disqus_identifier = "http://182.92.129.205/2020/03/26/hexo-%E9%98%BF%E9%87%8C%E4%BA%91%E9%85%8D%E7%BD%AE%E8%BF%87%E7%A8%8B/";
-    var disqus_url = "http://182.92.129.205/2020/03/26/hexo-%E9%98%BF%E9%87%8C%E4%BA%91%E9%85%8D%E7%BD%AE%E8%BF%87%E7%A8%8B/";
+    var disqus_identifier = "http://182.92.129.205/2020/03/26/Suricata%E5%AE%89%E8%A3%85/";
+    var disqus_url = "http://182.92.129.205/2020/03/26/Suricata%E5%AE%89%E8%A3%85/";
 
     (function() {
         var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
