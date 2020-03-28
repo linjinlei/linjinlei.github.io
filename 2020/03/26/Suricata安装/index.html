@@ -213,8 +213,7 @@
 
 <h1 id="Suricata运行及使用"><a href="#Suricata运行及使用" class="headerlink" title="Suricata运行及使用"></a>Suricata运行及使用</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 版本查看</span></span><br><span class="line">suricata -V</span><br><span class="line"><span class="comment"># 监听网卡</span></span><br><span class="line">suricata -c suricata.yaml -s test.rule -i eth0</span><br><span class="line"><span class="comment"># 检测pcap文件</span></span><br><span class="line">suricata -c suricata.yaml -s test.rule -r data.pcap</span><br></pre></td></tr></table></figure>
 
-<h1 id="Suricata日志文件"><a href="#Suricata日志文件" class="headerlink" title="Suricata日志文件"></a>Suricata日志文件</h1><p>##路径</p>
-<p>检测的结果一般来说是放在 <strong>/var/log/suricata/</strong> 下</p>
+<h1 id="Suricata日志文件"><a href="#Suricata日志文件" class="headerlink" title="Suricata日志文件"></a>Suricata日志文件</h1><p>检测的结果一般来说是放在 <strong>/var/log/suricata/</strong> 下</p>
 <h2 id="suricata-log"><a href="#suricata-log" class="headerlink" title="suricata.log"></a>suricata.log</h2><p>存放Suricata运行的日志</p>
 <h2 id="fast-log"><a href="#fast-log" class="headerlink" title="fast.log"></a>fast.log</h2><p>记录一些匹配信息</p>
 <h2 id="eve-json"><a href="#eve-json" class="headerlink" title="eve.json"></a>eve.json</h2><p>alert等信息一般来说都放在这个json文件里面</p>
