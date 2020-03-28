@@ -103,14 +103,14 @@
 
                         
                         <li>
-                            <a href="/tags/">Tags</a>
+                            <a href="/archive/">Archives</a>
                         </li>
                         
                     
 
                         
                         <li>
-                            <a href="/archive/">Archives</a>
+                            <a href="/tags/">Tags</a>
                         </li>
                         
                     
@@ -219,6 +219,9 @@
 <h2 id="fast-log"><a href="#fast-log" class="headerlink" title="fast.log"></a>fast.log</h2><p>记录一些匹配信息</p>
 <h2 id="eve-json"><a href="#eve-json" class="headerlink" title="eve.json"></a>eve.json</h2><p>alert等信息一般来说都放在这个json文件里面</p>
 <h2 id="rule-perf-log"><a href="#rule-perf-log" class="headerlink" title="rule-perf.log"></a>rule-perf.log</h2><p>这个文件记录每条规则的匹配时间等详细信息，如果需要开启这个功能需要在suricata.yaml中开启，会<strong>影响检测性能</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 编译过程</span></span><br><span class="line">sudo ./configure --<span class="built_in">enable</span>-profiling &amp;&amp; sudo make &amp;&amp; sudo make install</span><br><span class="line">sudo ldconfig</span><br></pre></td></tr></table></figure>
+
+<p>这个功能如果要启用，那么在编译的时候一定要加上 <strong>–enable-profiling</strong> 选项，否则日志中没有任何结果（这个真的超级坑！！！找了好几天才发现这个问题）。</p>
 <h2 id="packet-stats-log"><a href="#packet-stats-log" class="headerlink" title="packet_stats.log"></a>packet_stats.log</h2><p>这个文件记录每个数据包的匹配信息，如果需要开启这个功能需要在suricata.yaml中开启，会<strong>影响检测性能</strong></p>
 
 
