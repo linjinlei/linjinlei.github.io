@@ -13,11 +13,11 @@
 
     <title>
         
-          Suricata安装 - Karry&#39;s Blog
+          Docker安装 - Karry&#39;s Blog
         
     </title>
 
-    <link rel="canonical" href="http://182.92.129.205/2020/03/26/Suricata安装/">
+    <link rel="canonical" href="http://182.92.129.205/2020/04/10/Docker安装/">
 
     <!-- Bootstrap Core CSS -->
     
@@ -173,16 +173,14 @@
                         
                           <a class="tag" href="/tags/#教程" title="教程">教程</a>
                         
-                          <a class="tag" href="/tags/#IDS" title="IDS">IDS</a>
-                        
-                          <a class="tag" href="/tags/#Suricata" title="Suricata">Suricata</a>
+                          <a class="tag" href="/tags/#Docker" title="Docker">Docker</a>
                         
                     </div>
-                    <h1>Suricata安装</h1>
-                    <h2 class="subheading">Ubuntu Suricata安装过程</h2>
+                    <h1>Docker安装</h1>
+                    <h2 class="subheading">Ubuntu Docker安装过程</h2>
                     <span class="meta">
                         Posted by Karry Lin on
-                        2020-03-26
+                        2020-04-10
                     </span>
                 </div>
             </div>
@@ -201,27 +199,34 @@
                 col-md-10 col-md-offset-1
                 post-container">
 
-                <h1 id="系统"><a href="#系统" class="headerlink" title="系统"></a>系统</h1><p>Ubuntu 14.04、Ubuntu 16.04、Ubuntu 18.04均可</p>
-<h1 id="版本选择"><a href="#版本选择" class="headerlink" title="版本选择"></a>版本选择</h1><p>实际上来说各个版本都OK的，但是经过长时间的测试，问题最少、通用度最高的版本是<strong>4.1.5</strong>，不推荐5以上的版本，和3、4差别很大，而且经常会出现莫名其妙的问题。</p>
-<h1 id="安装所需依赖"><a href="#安装所需依赖" class="headerlink" title="安装所需依赖"></a>安装所需依赖</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get update</span><br><span class="line">sudo apt-get -y install libpcre3 libpcre3-dbg libpcre3-dev build-essential autoconf automake libtool libpcap-dev libnet1-dev libyaml-0-2 libyaml-dev zlib1g zlib1g-dev libcap-ng-dev libcap-ng0 make libmagic-dev libjansson-dev libjansson4 pkg-config</span><br></pre></td></tr></table></figure>
+                <p>#系统</p>
+<p>Ubuntu 14.04、Ubuntu 16.04、Ubuntu 18.04均可</p>
+<p>#删除原有的docker相关内容</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get remove docker docker-engine docker.io containerd runc</span><br></pre></td></tr></table></figure>
 
-<h1 id="Suricata安装"><a href="#Suricata安装" class="headerlink" title="Suricata安装"></a>Suricata安装</h1><p>进入Suricata的安装目录</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo ./configure &amp;&amp; sudo make &amp;&amp; sudo make install</span><br><span class="line">sudo ldconfig</span><br></pre></td></tr></table></figure>
+<p>#更新源</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get update</span><br></pre></td></tr></table></figure>
 
-<h1 id="进一步配置"><a href="#进一步配置" class="headerlink" title="进一步配置"></a>进一步配置</h1><p>这一步仍然在Suricata的安装目录下</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">sudo mkdir /var/<span class="built_in">log</span>/suricata</span><br><span class="line">sudo mkdir /etc/suricata</span><br><span class="line">sudo cp classification.config /etc/suricata</span><br><span class="line">sudo cp reference.config /etc/suricata</span><br><span class="line">sudo cp suricata.yaml /etc/suricata</span><br></pre></td></tr></table></figure>
+<h1 id="安装依赖包"><a href="#安装依赖包" class="headerlink" title="安装依赖包"></a>安装依赖包</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install apt-transport-https ca-certificates curl gnupg-agent software-properties-common</span><br></pre></td></tr></table></figure>
 
-<h1 id="Suricata运行及使用"><a href="#Suricata运行及使用" class="headerlink" title="Suricata运行及使用"></a>Suricata运行及使用</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 版本查看</span></span><br><span class="line">suricata -V</span><br><span class="line"><span class="comment"># 监听网卡</span></span><br><span class="line">suricata -c suricata.yaml -s test.rule -i eth0</span><br><span class="line"><span class="comment"># 检测pcap文件</span></span><br><span class="line">suricata -c suricata.yaml -s test.rule -r data.pcap</span><br><span class="line"><span class="comment"># 输出运行时间等详细信息</span></span><br><span class="line">suricata -c suricata.yaml -s test.rule -r data.pcap -v</span><br></pre></td></tr></table></figure>
+<p>#添加 Docker 的官方 GPG 密钥</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -</span><br></pre></td></tr></table></figure>
 
-<h1 id="Suricata日志文件"><a href="#Suricata日志文件" class="headerlink" title="Suricata日志文件"></a>Suricata日志文件</h1><p>检测的结果一般来说是放在 <strong>/var/log/suricata/</strong> 下</p>
-<h2 id="suricata-log"><a href="#suricata-log" class="headerlink" title="suricata.log"></a>suricata.log</h2><p>存放Suricata运行的日志</p>
-<h2 id="fast-log"><a href="#fast-log" class="headerlink" title="fast.log"></a>fast.log</h2><p>记录一些匹配信息</p>
-<h2 id="eve-json"><a href="#eve-json" class="headerlink" title="eve.json"></a>eve.json</h2><p>alert等信息一般来说都放在这个json文件里面</p>
-<h2 id="rule-perf-log"><a href="#rule-perf-log" class="headerlink" title="rule-perf.log"></a>rule-perf.log</h2><p>这个文件记录每条规则的匹配时间等详细信息，如果需要开启这个功能需要在suricata.yaml中开启，会<strong>影响检测性能</strong></p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 编译过程</span></span><br><span class="line">sudo ./configure --<span class="built_in">enable</span>-profiling &amp;&amp; sudo make &amp;&amp; sudo make install</span><br><span class="line">sudo ldconfig</span><br></pre></td></tr></table></figure>
+<p>#验证现在是否拥有带有指纹的密钥</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-key fingerprint 0EBFCD88</span><br></pre></td></tr></table></figure>
 
-<p>这个功能如果要启用，那么在编译的时候一定要加上 <strong>–enable-profiling</strong> 选项，否则日志中没有任何结果（这个真的超级坑！！！找了好几天才发现这个问题）。</p>
-<h2 id="packet-stats-log"><a href="#packet-stats-log" class="headerlink" title="packet_stats.log"></a>packet_stats.log</h2><p>这个文件记录每个数据包的匹配信息，如果需要开启这个功能需要在suricata.yaml中开启，会<strong>影响检测性能</strong></p>
+<h1 id="设置稳定版仓库"><a href="#设置稳定版仓库" class="headerlink" title="设置稳定版仓库"></a>设置稳定版仓库</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo add-apt-repository <span class="string">"deb [arch=amd64] https://download.docker.com/linux/ubuntu <span class="variable">$(lsb_release -cs)</span> stable"</span></span><br></pre></td></tr></table></figure>
+
+<h1 id="更新源"><a href="#更新源" class="headerlink" title="更新源"></a>更新源</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get update</span><br></pre></td></tr></table></figure>
+
+<p>#安装最新的Docker-ce </p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install docker-ce</span><br></pre></td></tr></table></figure>
+
+<p>#启动Docker</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sudo systemctl <span class="built_in">enable</span> docker</span><br><span class="line">sudo systemctl start docker</span><br><span class="line">sudo docker run hello-world</span><br></pre></td></tr></table></figure>
+
+<h1 id="Docker常用指令"><a href="#Docker常用指令" class="headerlink" title="Docker常用指令"></a>Docker常用指令</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 查看镜像</span></span><br><span class="line">sudo docker images</span><br><span class="line"><span class="comment"># 查看当前容器 当前正在运行的</span></span><br><span class="line">sudo docker ps</span><br><span class="line"><span class="comment"># 查看当前容器 包括停止的</span></span><br><span class="line">sudo docker ps -a</span><br><span class="line"><span class="comment"># 删除某个容器</span></span><br><span class="line">sudo docker rm container_name</span><br><span class="line"><span class="comment"># 删除当前所有的容器</span></span><br><span class="line">sudo docker rm -f $(sudo docker ps -a -q)</span><br><span class="line"><span class="comment"># 删除某个镜像</span></span><br><span class="line">sudo docker rmi -f image-name</span><br><span class="line"><span class="comment"># 运行容器</span></span><br><span class="line">sudo docker run --name container_name --cpus=2 -m 4G --privileged=<span class="literal">true</span> -itd image_name</span><br><span class="line"><span class="comment"># 执行容器</span></span><br><span class="line">sudo docker <span class="built_in">exec</span> -it container_name /bin/bash</span><br><span class="line"><span class="comment"># 拷贝文件</span></span><br><span class="line">sudo docker cp file_name container_name:/</span><br><span class="line">sudo docker cp container_name:/ position/</span><br><span class="line"><span class="comment"># 拷贝目录内容 /不能少</span></span><br><span class="line">sudo docker cp position/ container_name:/position/</span><br></pre></td></tr></table></figure>
+
 
 
                 <hr>
@@ -230,13 +235,9 @@
 
                 <ul class="pager">
                     
-                        <li class="previous">
-                            <a href="/2020/04/10/Snort安装/" data-toggle="tooltip" data-placement="top" title="Snort安装">&larr; Previous Post</a>
-                        </li>
-                    
                     
                         <li class="next">
-                            <a href="/2020/03/26/hexo-阿里云配置过程/" data-toggle="tooltip" data-placement="top" title="hexo + 阿里云配置过程">Next Post &rarr;</a>
+                            <a href="/2020/04/10/Snort安装/" data-toggle="tooltip" data-placement="top" title="Snort安装">Next Post &rarr;</a>
                         </li>
                     
                 </ul>
@@ -285,9 +286,7 @@
                        
                           <a class="tag" href="/tags/#教程" title="教程">教程</a>
                         
-                          <a class="tag" href="/tags/#IDS" title="IDS">IDS</a>
-                        
-                          <a class="tag" href="/tags/#Suricata" title="Suricata">Suricata</a>
+                          <a class="tag" href="/tags/#Docker" title="Docker">Docker</a>
                         
                     </div>
                 </section>
@@ -323,8 +322,8 @@
 <script type="text/javascript">
     /* * * CONFIGURATION VARIABLES * * */
     var disqus_shortname = "your-disqus-ID";
-    var disqus_identifier = "http://182.92.129.205/2020/03/26/Suricata%E5%AE%89%E8%A3%85/";
-    var disqus_url = "http://182.92.129.205/2020/03/26/Suricata%E5%AE%89%E8%A3%85/";
+    var disqus_identifier = "http://182.92.129.205/2020/04/10/Docker%E5%AE%89%E8%A3%85/";
+    var disqus_url = "http://182.92.129.205/2020/04/10/Docker%E5%AE%89%E8%A3%85/";
 
     (function() {
         var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;

@@ -13,11 +13,11 @@
 
     <title>
         
-          Suricata安装 - Karry&#39;s Blog
+          Snort安装 - Karry&#39;s Blog
         
     </title>
 
-    <link rel="canonical" href="http://182.92.129.205/2020/03/26/Suricata安装/">
+    <link rel="canonical" href="http://182.92.129.205/2020/04/10/Snort安装/">
 
     <!-- Bootstrap Core CSS -->
     
@@ -173,16 +173,16 @@
                         
                           <a class="tag" href="/tags/#教程" title="教程">教程</a>
                         
+                          <a class="tag" href="/tags/#Snort" title="Snort">Snort</a>
+                        
                           <a class="tag" href="/tags/#IDS" title="IDS">IDS</a>
                         
-                          <a class="tag" href="/tags/#Suricata" title="Suricata">Suricata</a>
-                        
                     </div>
-                    <h1>Suricata安装</h1>
-                    <h2 class="subheading">Ubuntu Suricata安装过程</h2>
+                    <h1>Snort安装</h1>
+                    <h2 class="subheading">Ubuntu Snort安装过程</h2>
                     <span class="meta">
                         Posted by Karry Lin on
-                        2020-03-26
+                        2020-04-10
                     </span>
                 </div>
             </div>
@@ -201,27 +201,36 @@
                 col-md-10 col-md-offset-1
                 post-container">
 
-                <h1 id="系统"><a href="#系统" class="headerlink" title="系统"></a>系统</h1><p>Ubuntu 14.04、Ubuntu 16.04、Ubuntu 18.04均可</p>
-<h1 id="版本选择"><a href="#版本选择" class="headerlink" title="版本选择"></a>版本选择</h1><p>实际上来说各个版本都OK的，但是经过长时间的测试，问题最少、通用度最高的版本是<strong>4.1.5</strong>，不推荐5以上的版本，和3、4差别很大，而且经常会出现莫名其妙的问题。</p>
-<h1 id="安装所需依赖"><a href="#安装所需依赖" class="headerlink" title="安装所需依赖"></a>安装所需依赖</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get update</span><br><span class="line">sudo apt-get -y install libpcre3 libpcre3-dbg libpcre3-dev build-essential autoconf automake libtool libpcap-dev libnet1-dev libyaml-0-2 libyaml-dev zlib1g zlib1g-dev libcap-ng-dev libcap-ng0 make libmagic-dev libjansson-dev libjansson4 pkg-config</span><br></pre></td></tr></table></figure>
+                <p>#系统</p>
+<p>Ubuntu 14.04、Ubuntu 16.04、Ubuntu 18.04均可</p>
+<h1 id="版本选择"><a href="#版本选择" class="headerlink" title="版本选择"></a>版本选择</h1><p>实际上来说各个版本都OK的，但是经过长时间的测试，问题最少、通用度最高的版本是<strong>2.9.11</strong>，不推荐最新的测试版本</p>
+<h1 id="安装所需依赖"><a href="#安装所需依赖" class="headerlink" title="安装所需依赖"></a>安装所需依赖</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 安装flex、bison、libpcap和libpcre 这些是daq所需要的依赖</span></span><br><span class="line">sudo apt-get install -y flex</span><br><span class="line">sudo apt-get install -y bison</span><br><span class="line">sudo apt-get install -y libpcap-dev</span><br><span class="line">sudo apt-get install -y libpcre3-dev</span><br><span class="line"><span class="comment"># 安装zlib 这个是snort需要的</span></span><br><span class="line">sudo apt-get install zlib1g-dev</span><br><span class="line"><span class="comment"># 安装make 如果系统里原本就有汇总个可以忽略</span></span><br><span class="line"><span class="comment"># daq、snort都需要通过make来安装</span></span><br><span class="line">sudo apt-get install make</span><br></pre></td></tr></table></figure>
 
-<h1 id="Suricata安装"><a href="#Suricata安装" class="headerlink" title="Suricata安装"></a>Suricata安装</h1><p>进入Suricata的安装目录</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo ./configure &amp;&amp; sudo make &amp;&amp; sudo make install</span><br><span class="line">sudo ldconfig</span><br></pre></td></tr></table></figure>
+<h1 id="daq安装"><a href="#daq安装" class="headerlink" title="daq安装"></a>daq安装</h1><p>daq是snort的依赖包，至于为什么要安装可以去官网查一下，这里就不再赘述。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 进入daq目录</span></span><br><span class="line"><span class="built_in">cd</span> daq</span><br><span class="line"><span class="comment"># 开始安装daq</span></span><br><span class="line">sudo ./configure</span><br><span class="line">sudo make</span><br><span class="line">sudo make install</span><br><span class="line"><span class="comment"># 让动态链接库为系统所共享</span></span><br><span class="line">sudo ldconfig</span><br></pre></td></tr></table></figure>
 
-<h1 id="进一步配置"><a href="#进一步配置" class="headerlink" title="进一步配置"></a>进一步配置</h1><p>这一步仍然在Suricata的安装目录下</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">sudo mkdir /var/<span class="built_in">log</span>/suricata</span><br><span class="line">sudo mkdir /etc/suricata</span><br><span class="line">sudo cp classification.config /etc/suricata</span><br><span class="line">sudo cp reference.config /etc/suricata</span><br><span class="line">sudo cp suricata.yaml /etc/suricata</span><br></pre></td></tr></table></figure>
+<h1 id="libdnet安装"><a href="#libdnet安装" class="headerlink" title="libdnet安装"></a>libdnet安装</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 进入libdnet所在目录</span></span><br><span class="line"><span class="built_in">cd</span> libdnet</span><br><span class="line"><span class="comment"># 开始安装libdnet</span></span><br><span class="line">sudo ./configure</span><br><span class="line">sudo make</span><br><span class="line">sudo make install</span><br><span class="line"><span class="comment"># 让动态链接库为系统所共享</span></span><br><span class="line"><span class="comment"># 这个和daq略微不同 如果没有这步 snort可以正常安装 但是在运行的时候会报错</span></span><br><span class="line">sudo ln -s /usr/<span class="built_in">local</span>/lib/libdnet.1 /usr/lib/libdnet.1</span><br></pre></td></tr></table></figure>
 
-<h1 id="Suricata运行及使用"><a href="#Suricata运行及使用" class="headerlink" title="Suricata运行及使用"></a>Suricata运行及使用</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 版本查看</span></span><br><span class="line">suricata -V</span><br><span class="line"><span class="comment"># 监听网卡</span></span><br><span class="line">suricata -c suricata.yaml -s test.rule -i eth0</span><br><span class="line"><span class="comment"># 检测pcap文件</span></span><br><span class="line">suricata -c suricata.yaml -s test.rule -r data.pcap</span><br><span class="line"><span class="comment"># 输出运行时间等详细信息</span></span><br><span class="line">suricata -c suricata.yaml -s test.rule -r data.pcap -v</span><br></pre></td></tr></table></figure>
+<h1 id="snort安装"><a href="#snort安装" class="headerlink" title="snort安装"></a>snort安装</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 进入snort所在目录</span></span><br><span class="line"><span class="built_in">cd</span> snort</span><br><span class="line"><span class="comment"># 开始安装snort</span></span><br><span class="line">sudo ./configure</span><br><span class="line">sudo make</span><br><span class="line">sudo make install</span><br></pre></td></tr></table></figure>
 
-<h1 id="Suricata日志文件"><a href="#Suricata日志文件" class="headerlink" title="Suricata日志文件"></a>Suricata日志文件</h1><p>检测的结果一般来说是放在 <strong>/var/log/suricata/</strong> 下</p>
-<h2 id="suricata-log"><a href="#suricata-log" class="headerlink" title="suricata.log"></a>suricata.log</h2><p>存放Suricata运行的日志</p>
-<h2 id="fast-log"><a href="#fast-log" class="headerlink" title="fast.log"></a>fast.log</h2><p>记录一些匹配信息</p>
-<h2 id="eve-json"><a href="#eve-json" class="headerlink" title="eve.json"></a>eve.json</h2><p>alert等信息一般来说都放在这个json文件里面</p>
-<h2 id="rule-perf-log"><a href="#rule-perf-log" class="headerlink" title="rule-perf.log"></a>rule-perf.log</h2><p>这个文件记录每条规则的匹配时间等详细信息，如果需要开启这个功能需要在suricata.yaml中开启，会<strong>影响检测性能</strong></p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 编译过程</span></span><br><span class="line">sudo ./configure --<span class="built_in">enable</span>-profiling &amp;&amp; sudo make &amp;&amp; sudo make install</span><br><span class="line">sudo ldconfig</span><br></pre></td></tr></table></figure>
+<h1 id="进一步配置"><a href="#进一步配置" class="headerlink" title="进一步配置"></a>进一步配置</h1><p>到这里为止，snort的安装就基本结束，但是还需要创建一些目录来支持运行。至于具体缺少哪些目录可以进行简单运行，根据报错的内容来创建即可。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 查看snort版本</span></span><br><span class="line">sudo snort -V</span><br></pre></td></tr></table></figure>
 
-<p>这个功能如果要启用，那么在编译的时候一定要加上 <strong>–enable-profiling</strong> 选项，否则日志中没有任何结果（这个真的超级坑！！！找了好几天才发现这个问题）。</p>
-<h2 id="packet-stats-log"><a href="#packet-stats-log" class="headerlink" title="packet_stats.log"></a>packet_stats.log</h2><p>这个文件记录每个数据包的匹配信息，如果需要开启这个功能需要在suricata.yaml中开启，会<strong>影响检测性能</strong></p>
+<p>如果出现一只小猪形状 就是安装成功了。</p>
+<p>Snort的安装包中有一个etc目录，里面含有一个snort.conf的配置文件，可以去这个里面修改。初始的配置文件默认规则文件存放在配置文件上一级目录的rules目录中，可以自行定义规则文件并在配置文件中对应添加。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 监听网卡eth0</span></span><br><span class="line">sudo snort -A fast -b -c snort.conf -i eth0</span><br><span class="line"><span class="comment"># 检测数据包</span></span><br><span class="line">sudo snort -A fast -b -c snort.conf -r data.pcap</span><br></pre></td></tr></table></figure>
+
+<p>因为安装过程中系统有差异，有的目录创建不尽相同，比较普遍的主要有以下的：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 存放alert等的目录</span></span><br><span class="line">sudo mkdir /vat/<span class="built_in">log</span>/snort</span><br></pre></td></tr></table></figure>
+
+<p>另外，还需要在rules目录中放入 <strong><em>black_lists.rules</em></strong>和<strong><em>white_lists.rules</em></strong>这个两个文件，这个在snort的安装包中也可以找到，当然也可以自行编写，这个语法和规则是一样的。</p>
+<p>#Snort运行及使用</p>
+<p>snort主要命令如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 监听网卡eth0</span></span><br><span class="line">sudo snort -A fast -b -c snort.conf -i eth0</span><br><span class="line"><span class="comment"># 检测数据包</span></span><br><span class="line">sudo snort -A fast -b -c snort.conf -r data.pcap</span><br></pre></td></tr></table></figure>
+
+<p>另外，配置文件里面还有其他的功能：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 输出触发alert的数据包的详细信息</span></span><br><span class="line">Snort官方文档2.6.3 alert_full</span><br><span class="line"><span class="comment"># 输出规则匹配情况 rule profiling</span></span><br><span class="line">Snort官方文档2.5.3 Rule Profiling</span><br><span class="line"><span class="comment"># 配置ppm相关内容</span></span><br><span class="line">Snort官方文档2.5.1 Packet Performance Monitoring(PPM)</span><br></pre></td></tr></table></figure>
+
 
 
                 <hr>
@@ -231,12 +240,12 @@
                 <ul class="pager">
                     
                         <li class="previous">
-                            <a href="/2020/04/10/Snort安装/" data-toggle="tooltip" data-placement="top" title="Snort安装">&larr; Previous Post</a>
+                            <a href="/2020/04/10/Docker安装/" data-toggle="tooltip" data-placement="top" title="Docker安装">&larr; Previous Post</a>
                         </li>
                     
                     
                         <li class="next">
-                            <a href="/2020/03/26/hexo-阿里云配置过程/" data-toggle="tooltip" data-placement="top" title="hexo + 阿里云配置过程">Next Post &rarr;</a>
+                            <a href="/2020/03/26/Suricata安装/" data-toggle="tooltip" data-placement="top" title="Suricata安装">Next Post &rarr;</a>
                         </li>
                     
                 </ul>
@@ -285,9 +294,9 @@
                        
                           <a class="tag" href="/tags/#教程" title="教程">教程</a>
                         
-                          <a class="tag" href="/tags/#IDS" title="IDS">IDS</a>
+                          <a class="tag" href="/tags/#Snort" title="Snort">Snort</a>
                         
-                          <a class="tag" href="/tags/#Suricata" title="Suricata">Suricata</a>
+                          <a class="tag" href="/tags/#IDS" title="IDS">IDS</a>
                         
                     </div>
                 </section>
@@ -323,8 +332,8 @@
 <script type="text/javascript">
     /* * * CONFIGURATION VARIABLES * * */
     var disqus_shortname = "your-disqus-ID";
-    var disqus_identifier = "http://182.92.129.205/2020/03/26/Suricata%E5%AE%89%E8%A3%85/";
-    var disqus_url = "http://182.92.129.205/2020/03/26/Suricata%E5%AE%89%E8%A3%85/";
+    var disqus_identifier = "http://182.92.129.205/2020/04/10/Snort%E5%AE%89%E8%A3%85/";
+    var disqus_url = "http://182.92.129.205/2020/04/10/Snort%E5%AE%89%E8%A3%85/";
 
     (function() {
         var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
