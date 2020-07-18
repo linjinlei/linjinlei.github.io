@@ -96,14 +96,14 @@
 
                         
                         <li>
-                            <a href="/about/">About</a>
+                            <a href="/archive/">Archives</a>
                         </li>
                         
                     
 
                         
                         <li>
-                            <a href="/archive/">Archives</a>
+                            <a href="/about/">About</a>
                         </li>
                         
                     
@@ -201,8 +201,7 @@
                 col-md-10 col-md-offset-1
                 post-container">
 
-                <p>#系统</p>
-<p>Ubuntu 14.04、Ubuntu 16.04、Ubuntu 18.04均可</p>
+                <h1 id="系统"><a href="#系统" class="headerlink" title="系统"></a>系统</h1><p>Ubuntu 14.04、Ubuntu 16.04、Ubuntu 18.04均可</p>
 <h1 id="版本选择"><a href="#版本选择" class="headerlink" title="版本选择"></a>版本选择</h1><p>实际上来说各个版本都OK的，但是经过长时间的测试，问题最少、通用度最高的版本是<strong>2.9.11</strong>，不推荐最新的测试版本</p>
 <h1 id="安装所需依赖"><a href="#安装所需依赖" class="headerlink" title="安装所需依赖"></a>安装所需依赖</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 安装flex、bison、libpcap和libpcre 这些是daq所需要的依赖</span></span><br><span class="line">sudo apt-get install -y flex</span><br><span class="line">sudo apt-get install -y bison</span><br><span class="line">sudo apt-get install -y libpcap-dev</span><br><span class="line">sudo apt-get install -y libpcre3-dev</span><br><span class="line"><span class="comment"># 安装zlib 这个是snort需要的</span></span><br><span class="line">sudo apt-get install zlib1g-dev</span><br><span class="line"><span class="comment"># 安装make 如果系统里原本就有汇总个可以忽略</span></span><br><span class="line"><span class="comment"># daq、snort都需要通过make来安装</span></span><br><span class="line">sudo apt-get install make</span><br></pre></td></tr></table></figure>
 
