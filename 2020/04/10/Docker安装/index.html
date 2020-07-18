@@ -96,14 +96,14 @@
 
                         
                         <li>
-                            <a href="/archive/">Archives</a>
+                            <a href="/about/">About</a>
                         </li>
                         
                     
 
                         
                         <li>
-                            <a href="/about/">About</a>
+                            <a href="/archive/">Archives</a>
                         </li>
                         
                     
@@ -199,13 +199,10 @@
                 col-md-10 col-md-offset-1
                 post-container">
 
-                <p>#系统</p>
-<p>Ubuntu 14.04、Ubuntu 16.04、Ubuntu 18.04均可</p>
-<p>#删除原有的docker相关内容</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get remove docker docker-engine docker.io containerd runc</span><br></pre></td></tr></table></figure>
+                <h1 id="系统"><a href="#系统" class="headerlink" title="系统"></a>系统</h1><p>Ubuntu 14.04、Ubuntu 16.04、Ubuntu 18.04均可</p>
+<h1 id="删除原有的docker相关内容"><a href="#删除原有的docker相关内容" class="headerlink" title="删除原有的docker相关内容"></a>删除原有的docker相关内容</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get remove docker docker-engine docker.io containerd runc</span><br></pre></td></tr></table></figure>
 
-<p>#更新源</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get update</span><br></pre></td></tr></table></figure>
+<h1 id="更新源"><a href="#更新源" class="headerlink" title="更新源"></a>更新源</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get update</span><br></pre></td></tr></table></figure>
 
 <h1 id="安装依赖包"><a href="#安装依赖包" class="headerlink" title="安装依赖包"></a>安装依赖包</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install apt-transport-https ca-certificates curl gnupg-agent software-properties-common</span><br></pre></td></tr></table></figure>
 
@@ -217,7 +214,7 @@
 
 <h1 id="设置稳定版仓库"><a href="#设置稳定版仓库" class="headerlink" title="设置稳定版仓库"></a>设置稳定版仓库</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo add-apt-repository <span class="string">"deb [arch=amd64] https://download.docker.com/linux/ubuntu <span class="variable">$(lsb_release -cs)</span> stable"</span></span><br></pre></td></tr></table></figure>
 
-<h1 id="更新源"><a href="#更新源" class="headerlink" title="更新源"></a>更新源</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get update</span><br></pre></td></tr></table></figure>
+<h1 id="更新源-1"><a href="#更新源-1" class="headerlink" title="更新源"></a>更新源</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get update</span><br></pre></td></tr></table></figure>
 
 <p>#安装最新的Docker-ce </p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install docker-ce</span><br></pre></td></tr></table></figure>
