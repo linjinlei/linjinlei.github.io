@@ -13,11 +13,11 @@
 
     <title>
         
-          Snort安装 - Karry&#39;s Blog
+          ElasticSearch-MongoDB环境配置 - Karry&#39;s Blog
         
     </title>
 
-    <link rel="canonical" href="http://182.92.129.205/2020/04/10/Snort安装/">
+    <link rel="canonical" href="http://182.92.129.205/2020/09/14/ElasticSearch-MongoDB环境配置/">
 
     <!-- Bootstrap Core CSS -->
     
@@ -173,16 +173,20 @@
                         
                           <a class="tag" href="/tags/#教程" title="教程">教程</a>
                         
-                          <a class="tag" href="/tags/#Snort" title="Snort">Snort</a>
+                          <a class="tag" href="/tags/#ElasticSearch" title="ElasticSearch">ElasticSearch</a>
                         
-                          <a class="tag" href="/tags/#IDS" title="IDS">IDS</a>
+                          <a class="tag" href="/tags/#MongoDB" title="MongoDB">MongoDB</a>
+                        
+                          <a class="tag" href="/tags/#数据库" title="数据库">数据库</a>
+                        
+                          <a class="tag" href="/tags/#平台搭建" title="平台搭建">平台搭建</a>
                         
                     </div>
-                    <h1>Snort安装</h1>
-                    <h2 class="subheading">Ubuntu Snort安装过程</h2>
+                    <h1>ElasticSearch-MongoDB环境配置</h1>
+                    <h2 class="subheading">ElasticSearch + MongoDB 数据库检索引擎环境配置</h2>
                     <span class="meta">
                         Posted by Karry Lin on
-                        2020-04-10
+                        2020-09-14
                     </span>
                 </div>
             </div>
@@ -201,35 +205,29 @@
                 col-md-10 col-md-offset-1
                 post-container">
 
-                <h1 id="系统"><a href="#系统" class="headerlink" title="系统"></a>系统</h1><p>Ubuntu 14.04、Ubuntu 16.04、Ubuntu 18.04均可</p>
-<h1 id="版本选择"><a href="#版本选择" class="headerlink" title="版本选择"></a>版本选择</h1><p>实际上来说各个版本都OK的，但是经过长时间的测试，问题最少、通用度最高的版本是<strong>2.9.11</strong>，不推荐最新的测试版本</p>
-<h1 id="安装所需依赖"><a href="#安装所需依赖" class="headerlink" title="安装所需依赖"></a>安装所需依赖</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 安装flex、bison、libpcap和libpcre 这些是daq所需要的依赖</span></span><br><span class="line">sudo apt-get install -y flex</span><br><span class="line">sudo apt-get install -y bison</span><br><span class="line">sudo apt-get install -y libpcap-dev</span><br><span class="line">sudo apt-get install -y libpcre3-dev</span><br><span class="line"><span class="comment"># 安装zlib 这个是snort需要的</span></span><br><span class="line">sudo apt-get install zlib1g-dev</span><br><span class="line"><span class="comment"># 安装make 如果系统里原本就有汇总个可以忽略</span></span><br><span class="line"><span class="comment"># daq、snort都需要通过make来安装</span></span><br><span class="line">sudo apt-get install make</span><br></pre></td></tr></table></figure>
+                <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>搭建实验室IPv6门户平台，可视化展示IPv6数据。先从数据库的设计和搭建开始，由于有公司已经做了很长时间的数据库调优，所以这部分工作就不再重复做了，直接用他们调好参数的数据库。搜索引擎选择的是ElasticSearch，数据库选用的是分布式数据库MongoDB，我想现在单机环境下测试，用熟练了之后再去服务器上部署，测试的过程都在docker容器上完成，到时候如果还想用直接打包即可。环境选的是centos。</p>
+<h1 id="Java安装"><a href="#Java安装" class="headerlink" title="Java安装"></a>Java安装</h1><p>elasticsearch依赖Java环境，所以先要安装Java，这里用简单的语句就能完成：</p>
+<figure class="highlight angelscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum install java<span class="number">-1.8</span><span class="number">.0</span>-openjdk* -y</span><br></pre></td></tr></table></figure>
 
-<h1 id="daq安装"><a href="#daq安装" class="headerlink" title="daq安装"></a>daq安装</h1><p>daq是snort的依赖包，至于为什么要安装可以去官网查一下，这里就不再赘述。</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 进入daq目录</span></span><br><span class="line"><span class="built_in">cd</span> daq</span><br><span class="line"><span class="comment"># 开始安装daq</span></span><br><span class="line">sudo ./configure</span><br><span class="line">sudo make</span><br><span class="line">sudo make install</span><br><span class="line"><span class="comment"># 让动态链接库为系统所共享</span></span><br><span class="line">sudo ldconfig</span><br></pre></td></tr></table></figure>
+<p>测试一下是否安装成功</p>
+<figure class="highlight applescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">java -<span class="built_in">version</span></span><br></pre></td></tr></table></figure>
 
-<h1 id="libdnet安装"><a href="#libdnet安装" class="headerlink" title="libdnet安装"></a>libdnet安装</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 进入libdnet所在目录</span></span><br><span class="line"><span class="built_in">cd</span> libdnet</span><br><span class="line"><span class="comment"># 开始安装libdnet</span></span><br><span class="line">sudo ./configure</span><br><span class="line">sudo make</span><br><span class="line">sudo make install</span><br><span class="line"><span class="comment"># 让动态链接库为系统所共享</span></span><br><span class="line"><span class="comment"># 这个和daq略微不同 如果没有这步 snort可以正常安装 但是在运行的时候会报错</span></span><br><span class="line">sudo ln -s /usr/<span class="built_in">local</span>/lib/libdnet.1 /usr/lib/libdnet.1</span><br></pre></td></tr></table></figure>
+<h1 id="Ubuntu-Java安装"><a href="#Ubuntu-Java安装" class="headerlink" title="Ubuntu Java安装"></a>Ubuntu Java安装</h1><p>简单用apt安装即可：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">apt-get <span class="keyword">update</span></span><br><span class="line">apt-<span class="keyword">get</span> <span class="keyword">install</span> openjdk<span class="number">-8</span>-jdk</span><br><span class="line"><span class="keyword">java</span> -<span class="keyword">version</span></span><br></pre></td></tr></table></figure>
 
-<h1 id="snort安装"><a href="#snort安装" class="headerlink" title="snort安装"></a>snort安装</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 进入snort所在目录</span></span><br><span class="line"><span class="built_in">cd</span> snort</span><br><span class="line"><span class="comment"># 开始安装snort</span></span><br><span class="line">sudo ./configure</span><br><span class="line">sudo make</span><br><span class="line">sudo make install</span><br></pre></td></tr></table></figure>
+<h1 id="Ubuntu-ElasticSearch安装"><a href="#Ubuntu-ElasticSearch安装" class="headerlink" title="Ubuntu ElasticSearch安装"></a>Ubuntu ElasticSearch安装</h1><figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">apt-<span class="built_in">get</span> install wget</span><br><span class="line">apt-<span class="built_in">get</span> install gnupg</span><br><span class="line">wget -qO - http<span class="variable">s:</span>//packages.elastic.<span class="keyword">co</span>/GPG-KEY-elasticsearch | apt-key <span class="built_in">add</span> -</span><br><span class="line"><span class="keyword">echo</span> <span class="string">"deb http://packages.elastic.co/elasticsearch/1.6/debian stable main"</span> | tee -<span class="keyword">a</span> /etc/apt/sources.<span class="keyword">list</span></span><br><span class="line">apt-<span class="built_in">get</span> <span class="keyword">update</span></span><br></pre></td></tr></table></figure>
 
-<h1 id="进一步配置"><a href="#进一步配置" class="headerlink" title="进一步配置"></a>进一步配置</h1><p>到这里为止，snort的安装就基本结束，但是还需要创建一些目录来支持运行。至于具体缺少哪些目录可以进行简单运行，根据报错的内容来创建即可。</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 查看snort版本</span></span><br><span class="line">sudo snort -V</span><br></pre></td></tr></table></figure>
+<h1 id="Docker-Elasticsearch"><a href="#Docker-Elasticsearch" class="headerlink" title="Docker Elasticsearch"></a>Docker Elasticsearch</h1><p>Elasticsearch的官方给了各个版本的docker镜像，直接pull然后run起来就行了</p>
+<figure class="highlight angelscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -d --name elasticsearch --net somenetwork -p <span class="number">9200</span>:<span class="number">9200</span> -p <span class="number">9300</span>:<span class="number">9300</span> -e <span class="string">"discovery.type=single-node"</span> elasticsearch:tag</span><br></pre></td></tr></table></figure>
 
-<p>如果出现一只小猪形状 就是安装成功了。</p>
-<p>Snort的安装包中有一个etc目录，里面含有一个snort.conf的配置文件，可以去这个里面修改。初始的配置文件默认规则文件存放在配置文件上一级目录的rules目录中，可以自行定义规则文件并在配置文件中对应添加。</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 监听网卡eth0</span></span><br><span class="line">sudo snort -A fast -b -c snort.conf -i eth0</span><br><span class="line"><span class="comment"># 检测数据包</span></span><br><span class="line">sudo snort -A fast -b -c snort.conf -r data.pcap</span><br></pre></td></tr></table></figure>
+<h1 id="Docker-MongoDB"><a href="#Docker-MongoDB" class="headerlink" title="Docker MongoDB"></a>Docker MongoDB</h1><p>和Elasticsearch类似，MongoDB官方也有各个版本的镜像</p>
+<figure class="highlight angelscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -itd --name mongo -p <span class="number">27017</span>:<span class="number">27017</span> mongo --auth</span><br></pre></td></tr></table></figure>
 
-<p>因为安装过程中系统有差异，有的目录创建不尽相同，比较普遍的主要有以下的：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 存放alert等的目录</span></span><br><span class="line">sudo mkdir /vat/<span class="built_in">log</span>/snort</span><br></pre></td></tr></table></figure>
+<p>然后要进入MongoDB的容器进行一些数据库操作的话，首先要创建一个用户，然后再用创建的这个用户登录进去就能正常操作了。</p>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">docker exec -it mongo mongo admin</span><br><span class="line">db.createUser(&#123; <span class="string">user:</span><span class="string">'admin'</span>,<span class="string">pwd:</span><span class="string">'123456'</span>,<span class="string">roles:</span>[ &#123; <span class="string">role:</span><span class="string">'userAdminAnyDatabase'</span>, <span class="string">db:</span> <span class="string">'admin'</span>&#125;,<span class="string">"readWriteAnyDatabase"</span>]&#125;);</span><br><span class="line">&gt; db.auth(<span class="string">'admin'</span>, <span class="string">'123456'</span>)</span><br></pre></td></tr></table></figure>
 
-<p>另外，还需要在rules目录中放入 <strong><em>black_lists.rules</em></strong>和<strong><em>white_lists.rules</em></strong>这个两个文件，这个在snort的安装包中也可以找到，当然也可以自行编写，这个语法和规则是一样的。</p>
-<p>#Snort运行及使用</p>
-<p>snort主要命令如下：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 监听网卡eth0</span></span><br><span class="line">sudo snort -A fast -b -c snort.conf -i eth0</span><br><span class="line"><span class="comment"># 检测数据包</span></span><br><span class="line">sudo snort -A fast -b -c snort.conf -r data.pcap</span><br></pre></td></tr></table></figure>
-
-<p>另外，配置文件里面还有其他的功能：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 输出触发alert的数据包的详细信息</span></span><br><span class="line">Snort官方文档2.6.3 alert_full</span><br><span class="line"><span class="comment"># 输出规则匹配情况 rule profiling</span></span><br><span class="line">Snort官方文档2.5.3 Rule Profiling</span><br><span class="line"><span class="comment"># 配置ppm相关内容</span></span><br><span class="line">Snort官方文档2.5.1 Packet Performance Monitoring(PPM)</span><br></pre></td></tr></table></figure>
-
+<h1 id="在Elasticsearch中同步MongoDB的数据"><a href="#在Elasticsearch中同步MongoDB的数据" class="headerlink" title="在Elasticsearch中同步MongoDB的数据"></a>在Elasticsearch中同步MongoDB的数据</h1><p>分别装好了Elasticsearch和MongoDB之后就可以将它们连接起来了，无论是安装在物理机上还是运行在docker容器中，都需要工具来将MongoDB的数据同步到Elasticsearch中。连接的工具常用的有：mongo-connector</p>
+<p>或者，如果是用docker来部署环境的话，可以直接用docker-compose来完成，网上有现成的文件。</p>
 
 
                 <hr>
@@ -238,13 +236,9 @@
 
                 <ul class="pager">
                     
-                        <li class="previous">
-                            <a href="/2020/04/10/Docker安装/" data-toggle="tooltip" data-placement="top" title="Docker安装">&larr; Previous Post</a>
-                        </li>
-                    
                     
                         <li class="next">
-                            <a href="/2020/03/26/Suricata安装/" data-toggle="tooltip" data-placement="top" title="Suricata安装">Next Post &rarr;</a>
+                            <a href="/2020/07/18/保研经历杂谈/" data-toggle="tooltip" data-placement="top" title="保研经历杂谈">Next Post &rarr;</a>
                         </li>
                     
                 </ul>
@@ -293,9 +287,13 @@
                        
                           <a class="tag" href="/tags/#教程" title="教程">教程</a>
                         
-                          <a class="tag" href="/tags/#Snort" title="Snort">Snort</a>
+                          <a class="tag" href="/tags/#ElasticSearch" title="ElasticSearch">ElasticSearch</a>
                         
-                          <a class="tag" href="/tags/#IDS" title="IDS">IDS</a>
+                          <a class="tag" href="/tags/#MongoDB" title="MongoDB">MongoDB</a>
+                        
+                          <a class="tag" href="/tags/#数据库" title="数据库">数据库</a>
+                        
+                          <a class="tag" href="/tags/#平台搭建" title="平台搭建">平台搭建</a>
                         
                     </div>
                 </section>
@@ -331,8 +329,8 @@
 <script type="text/javascript">
     /* * * CONFIGURATION VARIABLES * * */
     var disqus_shortname = "your-disqus-ID";
-    var disqus_identifier = "http://182.92.129.205/2020/04/10/Snort%E5%AE%89%E8%A3%85/";
-    var disqus_url = "http://182.92.129.205/2020/04/10/Snort%E5%AE%89%E8%A3%85/";
+    var disqus_identifier = "http://182.92.129.205/2020/09/14/ElasticSearch-MongoDB%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/";
+    var disqus_url = "http://182.92.129.205/2020/09/14/ElasticSearch-MongoDB%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/";
 
     (function() {
         var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
